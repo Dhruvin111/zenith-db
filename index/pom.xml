@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+    ================================================================
+    INDEX MODULE POM
+    ================================================================
+    Contains all index data structures:
+      - B+ Tree (primary index — page resident)
+      - Hash Index (equality lookups)
+
+    Depends on: core (uses buffer pool for page management,
+                      catalog for index registration)
+    ================================================================
+    -->
+
+    <parent>
+        <groupId>org.javadb</groupId>
+        <artifactId>javadb-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>index</artifactId>
+    <name>JavaDB Index — B+Tree, Hash Index</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.javadb</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
