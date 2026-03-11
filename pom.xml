@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+    ================================================================
+    ROOT PARENT POM — javadb-parent
+    ================================================================
+    This is the top-level Maven POM. It does NOT produce any JAR
+    itself (packaging = pom). Its sole job is:
+
+      1. Declare all four child modules
+      2. Set Java version & encoding uniformly
+      3. Define dependency versions in ONE place (dependencyManagement)
+         so child modules never hardcode versions
+      4. Configure the compiler plugin once for all modules
+
+    PostgreSQL parallel:
+      This mirrors PostgreSQL's top-level Makefile which orchestrates
+      all subsystem builds (backend, frontend, contrib) from one place.
+    ================================================================
+    -->
+
+    <groupId>org.javadb</groupId>
+    <artifactId>javadb-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>JavaDB - PostgreSQL Inspired Database Engine</name>
+    <description>
+        An industry-grade, PostgreSQL-inspired relational database engine
+        built from scratch in Java 21 for learning purposes.
+    </description>
+
+    <!--
+        Four modules — each is an independent Maven project.
+        Maven builds them in dependency order automatically.
+
+        Build order:
+          core → index → query → server
+        (server depends on all three, so it builds last)
+    -->
+    <modules>
+        <module>core</module>
+        <module>query</module>
+        <module>index</module>
+        <module>server</module>
+    </modules>
+
+    <properties>
+        <!--
+            Java 21 — mandatory for:
+              - Virtual Threads 
+              - Sealed classes 
+              - Pattern matching switch 
+              - Record patterns 
+              - Structured Concurrency 
+        -->
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Dependency versions defined ONCE here -->
+        <junit.version>5.10.1</junit.version>
+        <slf4j.version>2.0.9</slf4j.version>
+        <logback.version>1.4.14</logback.version>
+    </properties>
+
+    <!--
+        dependencyManagement:
+          Declares VERSION of each dependency centrally.
+          Does NOT add the dependency to any module.
+          Each module must explicitly declare what it needs
+          in its own <dependencies> block — but WITHOUT
+          specifying a version (inherited from here).
+
+        This is the Maven equivalent of PostgreSQL's
+        configure script — central version resolution.
+    -->
+    <dependencyManagement>
+        <dependencies>
+
+            <!--
+                SLF4J — Logging Facade
+                We program against the SLF4J API (interface),
+                not a specific logging impl. This mirrors how
+                PostgreSQL's elog() is an abstraction over the
+                actual log destination (stderr, syslog, file).
+            -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <!--
+                Logback — the actual logging implementation.
+                Only needed at runtime, not compile time.
+                Swap this for log4j2 if preferred — SLF4J
+                facade means zero code changes.
+            -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            <!-- JUnit 5 — test scope only, never in production JAR -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!--
+                Inter-module dependencies.
+                query, index, server all depend on core.
+                server additionally depends on query and index.
+            -->
+            <dependency>
+                <groupId>org.javadb</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.javadb</groupId>
+                <artifactId>query</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.javadb</groupId>
+                <artifactId>index</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+
+                <!--
+                    Maven Compiler Plugin
+                    Must be 3.11+ for proper Java 21 support.
+                    <release> tag is preferred over source/target
+                    as it also sets the bootstrap classpath correctly.
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                    <configuration>
+                        <release>21</release>
+                        <!--
+                            Enable preview features for Java 21.
+                            Required for: Structured Concurrency,
+                            String Templates (if used later).
+                        -->
+                        <compilerArgs>
+                            <arg>--enable-preview</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+
+                <!--
+                    Surefire — runs JUnit 5 tests.
+                    Must be 3.x for JUnit 5 support.
+                    Also needs enable-preview for test classes.
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.1.2</version>
+                    <configuration>
+                        <argLine>--enable-preview</argLine>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
