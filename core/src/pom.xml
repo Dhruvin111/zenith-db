@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+    ================================================================
+    CORE MODULE POM
+    ================================================================
+    The core module is the foundation of the entire engine.
+    It contains:
+      - Storage layer  (disk, pages, buffer pool, heap files)
+      - Type system    (data types, field values, tuples)
+      - Catalog        (schema registry — pg_class mirror)
+      - WAL            (write-ahead logging)
+      - Transactions   (lock manager, MVCC)
+      - Recovery       (ARIES)
+
+    No other module is a dependency here.
+    core only depends on logging + testing libraries.
+    ================================================================
+    -->
+
+    <!-- Inherit all version/plugin config from parent -->
+    <parent>
+        <groupId>org.javadb</groupId>
+        <artifactId>javadb-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>core</artifactId>
+    <name>JavaDB Core — Storage, Buffer, Catalog, WAL, Transactions</name>
+
+    <dependencies>
+        <!-- Logging API — compile time dependency -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- Logging impl — runtime only -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
