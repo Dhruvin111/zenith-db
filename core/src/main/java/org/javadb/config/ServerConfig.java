@@ -1,7 +1,5 @@
 package org.javadb.config;
 
-package org.javadb.config;
-
 /**
  * ============================================================
  * ServerConfig — Network & Runtime Server Configuration
