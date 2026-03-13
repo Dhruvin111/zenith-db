@@ -1,4 +1,4 @@
-# JavaDB — PostgreSQL-Inspired Database Engine
+# ZenithDB — PostgreSQL-Inspired Database Engine
 
 > A from-scratch, industry-grade relational database engine built in Java 21
 > for advanced learning purposes. Every layer — storage, buffer pool, WAL,
