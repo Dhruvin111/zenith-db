@@ -342,7 +342,7 @@ public final class DatabaseConfig {
      * Our default: ./data/ relative to the working directory.
      * This can be overridden via ServerConfig.
      */
-    public static final String DEFAULT_DATA_DIRECTORY = "./data";
+    public static final String DEFAULT_DATA_DIRECTORY = "." + java.io.File.separator + "data";
 
     /**
      * WAL log directory — separate from data files for performance.
@@ -351,7 +351,8 @@ public final class DatabaseConfig {
      * pg_wal/ directory inside PGDATA
      * Can be symlinked to a separate, faster disk.
      */
-    public static final String DEFAULT_WAL_DIRECTORY = "./data/wal";
+    public static final String DEFAULT_WAL_DIRECTORY = "." + java.io.File.separator + "data"
+            + java.io.File.separator + "wal";
 
     /**
      * File extension for heap (table) data files.
