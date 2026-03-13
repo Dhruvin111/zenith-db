@@ -522,7 +522,7 @@ This project is licensed under the MIT License.
 See the [LICENSE](LICENSE) file for full details.
 
 ```
-MIT License — Copyright (c) 2026 JavaDB Contributors
+MIT License — Copyright (c) 2026 ZenithDB Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software to use, copy, modify, merge, publish, and
