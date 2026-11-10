@@ -163,9 +163,7 @@
                             Required for: Structured Concurrency,
                             String Templates (if used later).
                         -->
-                        <compilerArgs>
-                            <arg>--enable-preview</arg>
-                        </compilerArgs>
+
                     </configuration>
                 </plugin>
 
